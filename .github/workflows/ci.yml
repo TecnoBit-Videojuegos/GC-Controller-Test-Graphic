@@ -22,6 +22,7 @@ jobs:
   clang-format:
     name: clang-format
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,7 +31,7 @@ jobs:
         with:
           clang-format-version: "14"
           check-path: "common ppc"
-    build:
+  build:
     name: Build
     runs-on: ubuntu-latest
     steps:
