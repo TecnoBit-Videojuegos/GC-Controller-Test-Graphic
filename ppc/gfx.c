@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <math.h>
 #include <string.h>
+#include "textures_gen.h"
 
 #define FIFO_SIZE (256 * 1024)
 #define SEGMENTS 28
@@ -119,4 +120,56 @@ void gfx_ring(f32 cx, f32 cy, f32 rInner, f32 rOuter, u32 color) {
     vertex(cx + cosf(a) * rInner, cy + sinf(a) * rInner, color);
   }
   GX_End();
+}
+
+static void tex_begin(const gx_texdesc *t) {
+  GXTexObj obj;
+  GX_InitTexObj(&obj, (void *)t->data, t->tw, t->th, GX_TF_RGBA8, GX_CLAMP,
+                GX_CLAMP, GX_FALSE);
+  GX_InitTexObjFilterMode(&obj, GX_NEAR, GX_NEAR);
+  GX_LoadTexObj(&obj, GX_TEXMAP0);
+
+  GX_ClearVtxDesc();
+  GX_SetVtxDesc(GX_VA_POS, GX_DIRECT);
+  GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+  GX_SetVtxAttrFmt(GX_VTXFMT1, GX_VA_POS, GX_POS_XY, GX_F32, 0);
+  GX_SetVtxAttrFmt(GX_VTXFMT1, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+  GX_SetNumTexGens(1);
+  GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+  GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLORNULL);
+  GX_SetTevOp(GX_TEVSTAGE0, GX_REPLACE);
+}
+
+static void tex_end(void) {
+  // Dejar todo como estaba para que las formas normales sigan funcionando
+  GX_ClearVtxDesc();
+  GX_SetVtxDesc(GX_VA_POS, GX_DIRECT);
+  GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+  GX_SetNumTexGens(0);
+  GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORDNULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+  GX_SetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+}
+
+// rot: 0 = normal, 1 = girada a la derecha, 2 = abajo, 3 = izquierda
+void gfx_tex_draw_rot(const gx_texdesc *t, f32 x, f32 y, int rot) {
+  f32 u = (f32)t->w / t->tw;
+  f32 v = (f32)t->h / t->th;
+  f32 U[4] = {0, u, u, 0};
+  f32 V[4] = {0, 0, v, v};
+  f32 px[4] = {x, x + t->w, x + t->w, x};
+  f32 py[4] = {y, y, y + t->h, y + t->h};
+
+  tex_begin(t);
+  GX_Begin(GX_QUADS, GX_VTXFMT1, 4);
+  for (int i = 0; i < 4; i++) {
+    int k = (i - rot + 4) & 3;
+    GX_Position2f32(px[i], py[i]);
+    GX_TexCoord2f32(U[k], V[k]);
+  }
+  GX_End();
+  tex_end();
+}
+
+void gfx_tex_draw(const gx_texdesc *t, f32 x, f32 y) {
+  gfx_tex_draw_rot(t, x, y, 0);
 }
