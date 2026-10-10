@@ -13,3 +13,7 @@ build_gamecube/
 # IDEs
 .vscode/
 .idea/
+
+# Texturas generadas
+ppc/textures_gen.c
+ppc/textures_gen.h
