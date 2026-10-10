@@ -2,6 +2,7 @@
 #define GFX_H
 
 #include <gccore.h>
+#include "textures_gen.h"
 
 #define SCREEN_W 640.0f
 #define SCREEN_H 480.0f
@@ -23,6 +24,8 @@ void gfx_end(void);
 void gfx_rect(f32 x, f32 y, f32 w, f32 h, u32 color);
 void gfx_ellipse(f32 cx, f32 cy, f32 rx, f32 ry, u32 color);
 void gfx_ring(f32 cx, f32 cy, f32 rInner, f32 rOuter, u32 color);
+void gfx_tex_draw(const gx_texdesc *t, f32 x, f32 y);
+void gfx_tex_draw_rot(const gx_texdesc *t, f32 x, f32 y, int rot);
 
 void gfx_draw_controller(const PadState *p, int activePad);
 
