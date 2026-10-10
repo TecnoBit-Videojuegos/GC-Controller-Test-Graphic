@@ -37,6 +37,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Convert PNG to GX textures
+        run: |
+          python3 -m pip install pillow
+          python3 tools/png2gx.py data/tex ppc/textures_gen
       - name: Build GameCube
         run: ./build_docker.sh gamecube
       - name: Align GameCube DOL sections
