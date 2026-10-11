@@ -11,6 +11,18 @@
 // Cuántos cuadros hay que mantenerla (unos 2 segundos)
 #define EXIT_FRAMES 120
 
+// Volver a Swiss (o al cargador que nos abrió)
+static void salir(void) {
+  volatile u32 *stub = (volatile u32 *)0x80001800;
+  // Swiss deja la marca "STUBHAXX" en 0x80001804
+  if (stub[1] == 0x53545542 && stub[2] == 0x48415858) {
+    SYS_ResetSystem(SYS_SHUTDOWN, 0, 0);
+    ((void (*)(void))0x80001800)();
+  }
+  // Si no hay Swiss, salida normal
+  exit(0);
+}
+
 int main(int argc, char **argv) {
   gfx_init();
   PAD_Init();
@@ -46,12 +58,8 @@ int main(int argc, char **argv) {
     // Salir: mantener la combinación durante unos 2 segundos
     if ((keysHeld[activePad] & EXIT_COMBO) == EXIT_COMBO) {
       exitCounter++;
-      if (exitCounter >= EXIT_FRAMES) {
-#ifdef __WII__
-        exit(0);
-#else
-        SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-#endif
+            if (exitCounter >= EXIT_FRAMES) {
+        salir();
       }
     } else {
       exitCounter = 0;
