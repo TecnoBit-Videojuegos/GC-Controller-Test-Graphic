@@ -106,3 +106,6 @@ void gfx_draw_controller(const PadState *p, int activePad) {
   stick(&tex_stick_main_cap, p->stickX, p->stickY, STICK_MAIN_X, STICK_MAIN_Y);
   stick(&tex_stick_c_cap, p->cX, p->cY, STICK_C_X, STICK_C_Y);
 }
+
+  // Mensaje de salida, debajo del mando
+  gfx_tex_draw(&tex_msg_exit, (SCREEN_W - tex_msg_exit.w) / 2, 395);
