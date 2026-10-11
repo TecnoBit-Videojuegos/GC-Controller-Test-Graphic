@@ -6,11 +6,18 @@
 #include "gfx.h"
 #include "ppc_utils.h"
 
+// Combinación para salir: Start + Z + L + R a la vez
+#define EXIT_COMBO                                                             \
+  (PAD_BUTTON_START | PAD_TRIGGER_Z | PAD_TRIGGER_L | PAD_TRIGGER_R)
+// Cuántos cuadros hay que mantenerla (unos 2 segundos)
+#define EXIT_FRAMES 120
+
 int main(int argc, char **argv) {
   gfx_init();
   PAD_Init();
 
   int activePad = 0;
+  int exitCounter = 0;
   u16 keysHeld[4] = {0, 0, 0, 0};
   u16 keysHeldOld[4] = {0, 0, 0, 0};
 
@@ -37,12 +44,19 @@ int main(int argc, char **argv) {
       PAD_ControlMotor(activePad, 1);
     }
 
+    // Salir: mantener la combinación durante unos 2 segundos
+    if ((keysHeld[activePad] & EXIT_COMBO) == EXIT_COMBO) {
+      exitCounter++;
+      if (exitCounter >= EXIT_FRAMES) {
 #ifdef __WII__
-    if (keysHeld[activePad] & PAD_TRIGGER_L &&
-        keysHeldOld[activePad] & PAD_TRIGGER_R) {
-      exit(0);
-    }
+        exit(0);
+#else
+        SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
 #endif
+      }
+    } else {
+      exitCounter = 0;
+    }
 
     // Active controller modifier
     for (int i = 0; i < 4; i++) {
