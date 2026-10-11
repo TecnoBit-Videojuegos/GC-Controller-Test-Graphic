@@ -6,9 +6,8 @@
 #include "gfx.h"
 #include "ppc_utils.h"
 
-// Combinación para salir: Start + Z + L + R a la vez
-#define EXIT_COMBO                                                             \
-  (PAD_BUTTON_START | PAD_TRIGGER_Z | PAD_TRIGGER_L | PAD_TRIGGER_R)
+// Combinación para salir: Start + A a la vez
+#define EXIT_COMBO (PAD_BUTTON_START | PAD_BUTTON_A)
 // Cuántos cuadros hay que mantenerla (unos 2 segundos)
 #define EXIT_FRAMES 120
 
