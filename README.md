@@ -43,55 +43,6 @@ La versión original mostraba los valores del control como **números** en panta
 
 ---
 
-
-### Opción 1: con devkitPro instalado
-
-| Consola | Comando |
-|---|---|
-| GameCube | `TARGET_CONSOLE=gamecube make` |
-| Wii | `TARGET_CONSOLE=wii make` |
-
-### Opción 2: sin devkitPro (usando Docker)
-
-El script `build_docker.sh` usa la imagen `devkitpro/devkitppc` para compilar:
-
-```bash
-# Para GameCube
-./build_docker.sh gamecube
-
-# Para Wii
-./build_docker.sh wii
-```
-
----
-
-## 📁 Estructura del repositorio
-
-```
-GC-Controller-Test-Graphic/
-├── .github/workflows/   # Flujos de integración continua
-├── common/              # Código compartido entre GameCube y Wii
-├── docs/                # Documentación e imágenes (captura de pantalla)
-├── ppc/                 # Código específico de PowerPC
-├── Makefile             # Archivo de compilación
-├── build_docker.sh      # Script para compilar con Docker
-├── LICENSE.md           # Licencia
-└── README.md            # Este archivo
-```
-
----
-
-## 🔀 Cambios en este fork
-
-| Original | Este fork |
-|---|---|
-| Muestra los valores del control como números | Muestra un **control de GameCube gráfico** |
-| Lectura de datos en texto | Los botones se **presionan visualmente** en pantalla al usarlos |
-
-El objetivo es que la prueba de controles sea más visual y fácil de interpretar.
-
----
-
 ## 📄 Licencia
 
 Este proyecto hereda la licencia del original. Consulta el archivo [`LICENSE.md`](LICENSE.md) para más detalles.
