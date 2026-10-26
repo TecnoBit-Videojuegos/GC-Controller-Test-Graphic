@@ -43,15 +43,6 @@ La versión original mostraba los valores del control como **números** en panta
 
 ---
 
-## 📥 Descargas
-
-Los binarios ya compilados están en la sección de releases del proyecto original:
-
-👉 [Releases de GC-Controller-Test](https://github.com/corenting/GC-Controller-Test/releases)
-
----
-
-## 🛠️ Cómo compilar
 
 ### Opción 1: con devkitPro instalado
 
